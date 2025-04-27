@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://c32hcn5geskv3"]
+
+[ext_resource type="Script" uid="uid://bn06dev1mv6nr" path="res://scenes/textbox/text_box.gd" id="1_8uj14"]
+
+[node name="TextBox" type="PanelContainer"]
+script = ExtResource("1_8uj14")
+
+[node name="Text" type="Label" parent="."]
+layout_mode = 2

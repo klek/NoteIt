@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3 uid="uid://cbv7lhxhli651"]
+
+[ext_resource type="Script" uid="uid://bsjfdmy2pc470" path="res://resources/card/card_data.gd" id="1_dopvn"]
+
+[resource]
+script = ExtResource("1_dopvn")
+title = "Define a table"
+description = "This is the top-level data-structure. The table contains columns, which in turn contain the cards."
+wrap_text = true
+metadata/_custom_type_script = "uid://bsjfdmy2pc470"

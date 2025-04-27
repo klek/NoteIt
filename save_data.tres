@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="TableData" load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://resources/column/column_data.gd" id="1_jso1m"]
+[ext_resource type="Script" path="res://resources/card/card_data.gd" id="2_xd7d0"]
+[ext_resource type="Script" path="res://resources/table/table_data.gd" id="3_y56bo"]
+
+[sub_resource type="Resource" id="Resource_jso1m"]
+script = ExtResource("2_xd7d0")
+title = "Setup Cards"
+description = "Define and setup cards for the database"
+wrap_text = true
+
+[sub_resource type="Resource" id="Resource_xd7d0"]
+script = ExtResource("2_xd7d0")
+title = "Define a table"
+description = "This is the top-level data-structure. The table contains columns, which in turn contain the cards."
+wrap_text = true
+
+[sub_resource type="Resource" id="Resource_y56bo"]
+script = ExtResource("1_jso1m")
+column_width = 70
+column_title = "TODO"
+column_index = 0
+card_datas = Array[ExtResource("2_xd7d0")]([SubResource("Resource_jso1m"), SubResource("Resource_xd7d0")])
+
+[sub_resource type="Resource" id="Resource_gkxqa"]
+script = ExtResource("1_jso1m")
+column_width = 70
+column_title = "Finished"
+column_index = 0
+card_datas = Array[ExtResource("2_xd7d0")]([null, null, null])
+
+[sub_resource type="Resource" id="Resource_oopte"]
+script = ExtResource("2_xd7d0")
+title = "Setup columns"
+description = "Define columns as an array of cards. A column also has a title etc"
+wrap_text = true
+
+[sub_resource type="Resource" id="Resource_08bqx"]
+script = ExtResource("2_xd7d0")
+title = "Setup columns"
+description = "Define columns as an array of cards. A column also has a title etc"
+wrap_text = true
+
+[sub_resource type="Resource" id="Resource_nmfn1"]
+script = ExtResource("2_xd7d0")
+title = "Define a table"
+description = "This is the top-level data-structure. The table contains columns, which in turn contain the cards."
+wrap_text = true
+
+[sub_resource type="Resource" id="Resource_rspwa"]
+script = ExtResource("1_jso1m")
+column_width = 70
+column_title = "TODO"
+column_index = 0
+card_datas = Array[ExtResource("2_xd7d0")]([SubResource("Resource_oopte"), SubResource("Resource_08bqx"), SubResource("Resource_nmfn1")])
+
+[resource]
+script = ExtResource("3_y56bo")
+title = "Database"
+bg_color = Color(0.812867, 0.998165, 0.761959, 1)
+column_datas = Array[ExtResource("1_jso1m")]([SubResource("Resource_y56bo"), SubResource("Resource_gkxqa"), SubResource("Resource_rspwa")])

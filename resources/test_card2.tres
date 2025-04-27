@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3 uid="uid://br7mq5p7rael5"]
+
+[ext_resource type="Script" uid="uid://bsjfdmy2pc470" path="res://resources/card/card_data.gd" id="1_mx7wh"]
+
+[resource]
+script = ExtResource("1_mx7wh")
+title = "Setup columns"
+description = "Define columns as an array of cards. A column also has a title etc"
+wrap_text = true
+metadata/_custom_type_script = "uid://bsjfdmy2pc470"

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ColumnData" load_steps=4 format=3 uid="uid://b704g1vfj48ox"]
+
+[ext_resource type="Script" uid="uid://bsjfdmy2pc470" path="res://resources/card/card_data.gd" id="1_20b34"]
+[ext_resource type="Resource" uid="uid://bpbimyr5afwjl" path="res://resources/test_card1.tres" id="2_3g583"]
+[ext_resource type="Script" uid="uid://4anmjhagvynt" path="res://resources/column/column_data.gd" id="2_mymug"]
+
+[resource]
+script = ExtResource("2_mymug")
+column_width = 70
+column_title = "Finished"
+column_index = 1
+card_datas = Array[ExtResource("1_20b34")]([ExtResource("2_3g583"), null, null, null])
+metadata/_custom_type_script = "uid://4anmjhagvynt"

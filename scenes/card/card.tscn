@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvhi5g7elwyoq"]
+
+[ext_resource type="Script" uid="uid://basbg6eyv6biq" path="res://scenes/card/card.gd" id="1_imta7"]
+[ext_resource type="PackedScene" uid="uid://c32hcn5geskv3" path="res://scenes/textbox/text_box.tscn" id="1_qnn7r"]
+
+[node name="Card" type="PanelContainer"]
+offset_right = 17.0
+offset_bottom = 66.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_imta7")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_qnn7r")]
+layout_mode = 2
+text = "This is Title"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Description" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_qnn7r")]
+layout_mode = 2
+text = "This is description"
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="gui_input" from="MarginContainer/VBoxContainer/Title" to="." method="_on_gui_input"]
+[connection signal="gui_input" from="MarginContainer/VBoxContainer/HSeparator" to="." method="_on_gui_input"]
+[connection signal="gui_input" from="MarginContainer/VBoxContainer/Description" to="." method="_on_gui_input"]

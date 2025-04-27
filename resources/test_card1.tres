@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3 uid="uid://bpbimyr5afwjl"]
+
+[ext_resource type="Script" uid="uid://bsjfdmy2pc470" path="res://resources/card/card_data.gd" id="1_v5h4b"]
+
+[resource]
+script = ExtResource("1_v5h4b")
+title = "Setup Cards"
+description = "Define and setup cards for the database"
+wrap_text = true
+metadata/_custom_type_script = "uid://bsjfdmy2pc470"

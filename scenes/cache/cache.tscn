@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3xim2qtub5ip"]
+
+[ext_resource type="Script" uid="uid://bs3005ixjw1gx" path="res://scenes/cache/cache.gd" id="1_g2bne"]
+
+[node name="Cache" type="Node"]
+script = ExtResource("1_g2bne")
