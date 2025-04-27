@@ -44,3 +44,5 @@ layout_mode = 2
 [node name="GrabbedCard" parent="." instance=ExtResource("4_wpgb8")]
 visible = false
 layout_mode = 2
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/AddColumn" to="." method="_on_add_column_pressed"]

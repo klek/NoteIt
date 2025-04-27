@@ -1,6 +1,8 @@
 class_name ColumnData
 extends Resource
 
+const c_max_int : int = int(pow(2, 62))
+
 ## Signal generated when there is an interaction with this column_data
 ## This signal is primarily used for GUI interactions
 signal column_interact( column_data : ColumnData, index : int, button : int )
@@ -117,13 +119,13 @@ func drop_card_data( grabbed_card_data : CardData, index : int ) -> CardData:
     return return_card_data
 
 
-func add_card_data( grabbed_card_data : CardData, index : int = INF ) -> void:
+func add_card_data( grabbed_card_data : CardData, index : int = c_max_int ) -> void:
     if ( card_datas.size() < 1 ):
         print( "Empty array" )
     else:
         print( "%d elements in array" % card_datas.size() )
     # Adding a card is easy
-    if ( index == INF ):
+    if ( index == c_max_int ):
         card_datas.push_back( grabbed_card_data )
     else:
         card_datas.insert( index, grabbed_card_data )

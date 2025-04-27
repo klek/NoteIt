@@ -1,13 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://db5uexos8hyut"]
+[gd_scene load_steps=4 format=3 uid="uid://db5uexos8hyut"]
 
 [ext_resource type="PackedScene" uid="uid://bjpm6kucf6e5g" path="res://scenes/table/table.tscn" id="1_hyk8p"]
 [ext_resource type="Script" uid="uid://b7j1mft3sw4bd" path="res://scenes/main/main.gd" id="1_iuonh"]
-[ext_resource type="Resource" uid="uid://dy5r0tvfwtb0j" path="res://resources/test_table1.tres" id="2_k2fmo"]
 [ext_resource type="PackedScene" uid="uid://d3xim2qtub5ip" path="res://scenes/cache/cache.tscn" id="4_l3cfh"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_iuonh")
-table_data = ExtResource("2_k2fmo")
+
+[node name="Cache" parent="." instance=ExtResource("4_l3cfh")]
+unique_name_in_owner = true
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -49,7 +50,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="FileDialog" type="FileDialog" parent="UI"]
+[node name="FileOpen" type="FileDialog" parent="UI"]
 unique_name_in_owner = true
 title = "Open a File"
 initial_position = 2
@@ -57,5 +58,8 @@ ok_button_text = "Open"
 file_mode = 0
 access = 2
 
-[node name="Cache" parent="." instance=ExtResource("4_l3cfh")]
+[node name="FileSave" type="FileDialog" parent="UI"]
 unique_name_in_owner = true
+auto_translate_mode = 1
+initial_position = 2
+access = 2

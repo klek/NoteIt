@@ -102,3 +102,7 @@ func _on_table_interact( table_data : TableData, index : int, button : int ) -> 
             pass
     # Update the GrabbedCard panel
     update_grabbed_card()
+
+
+func _on_add_column_pressed() -> void:
+    pass # Replace with function body.

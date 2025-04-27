@@ -1,59 +1,153 @@
 class_name Cache
 extends Node
 
-@export var current_table : TableData
+## Enumeration to define file-actions for the signal filepath_used
+enum FILE_PATH_ACTION {
+    SET,
+    OPENED,
+    SAVED,
 
-var current_filepath : String
+    UNDEF
+}
 
+# Signals
+## Signal emitted when the cached table is updated
+## This should be used to update the GUI
+signal cached_table_updated( table_data : TableData, cleared : bool )
+
+## Signal used for filepath changes and uses
+signal filepath_used( filePath : String, action : FILE_PATH_ACTION )
+
+## Signal used to request a save file
+# NOTE(klek): Could potentially use this with filepath_used and actions?
+signal request_save_file()
+
+## Variable to store the currently cached table
+@export var cached_table : TableData : set = _set_table, get = _get_table
+
+## Variable to store the currently cached filepath
+@export var cached_filepath : String = "" : set = _set_file_path, get = _get_file_path
 
 # Internal variables
-#var _valid_filename_regex : RegEx = RegEx.new()
-#var _json : JSON = JSON.new()
+# Variable to store all previously cached tables, since last clear
+# Clears happen on file-load or if the cached table is set to an empty
+# table
+# TODO(klek): Use this for undo action
+var _cached_tables : Array[ TableData ]
 
+# Set function for the cached_table
+# NOTE(klek): The cached table should always have a valid table
+func _set_table( value : TableData ) -> void:
+    # Check if the value is null
+    if ( value == null || value.is_empty() ):
+        # Then we clear the cached data
+        _cached_tables.clear()
+        cached_table = TableData.new()
+        _cached_tables.push_back( cached_table )
+        # Emit the update
+        cached_table_updated.emit( cached_table, true )
+    else:
+        # Add the newest table to the array
+        _cached_tables.push_back( value )
+        cached_table = value
+        # Emit the update
+        cached_table_updated.emit( cached_table, false )
 
-#func _enter_tree() -> void:
-#    _valid_filename_regex.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}.txt")
+# Get function for cached_table
+func _get_table( ) -> TableData:
+    return cached_table
 
+# Set function for cached_filepath
+func _set_file_path( value : String ) -> void:
+    # NOTE(klek): Do we need to check something here?
+    cached_filepath = value
+    filepath_used.emit( cached_filepath, FILE_PATH_ACTION.SET )
 
-func save_file( table_data : TableData ) -> void:
-    var file : = FileAccess.open( "res://save_data.json", FileAccess.WRITE )
+# Get function for cached_filepath
+func _get_file_path( ) -> String:
+    return cached_filepath
+
+# This function tries to save the currently cached table to the path
+# provided. If a path is not provided, it tries to save to the cached
+# filepath.
+# If there is no cached filepath, this function emits a request for
+# a filepath and returns
+# If the data was saved, the signal for filepath used will be emitted
+# with the save action
+func save_to_file( filePath : String = "" ) -> void:
+    # If we don't have a cached filepath we need to prompt the user
+    # about a filepath
+    # If we got a filepath, we prioritize that one
+    if ( !filePath.is_empty() ):
+        cached_filepath = filePath
+    # Otherwise we use the cache filepath
+    elif ( cached_filepath.is_empty() ):
+        # If this is empty, well we are in a pickle...
+        # TODO(klek): Prompt user about a save location / filepath
+        request_save_file.emit()
+        print( "Need a path to save to!" )
+        # and then we return her
+        return
+    # Otherwise, lets continue to open the provide path
+    var file : = FileAccess.open( cached_filepath, FileAccess.WRITE )
     if ( file ):
         # NOTE(klek): Do we need to check if the file is empty?
-        var data_to_save : Dictionary = table_data.convert_to_dict()
+        var data_to_save : Dictionary = cached_table.convert_to_dict()
         file.store_string( JSON.stringify( data_to_save, "\t" ) )
         file.close()
-    ResourceSaver.save( table_data, "res://save_data.tres")
+        # TODO(klek): We should show a small popup here of successfull save
+        filepath_used.emit( cached_filepath, FILE_PATH_ACTION.SAVED )
+    else:
+        print( "Could not open save-file: %s" % cached_filepath )
 
-
-func load_file( filename : String ) -> TableData:
-    # NOTE(klek): This is temporary
+# This function is used to load a table from file. It tries to load a
+# table from the provided path.
+# If there is already a cached table that is not empty, this function
+# will emit a signal to request a save-file.
+# If the file was loaded successfully and contains a table, the cached
+# table will be updated to this and return
+# NOTE(klek): Successfully loading from file, will reset the cached table
+# history
+func load_from_file( filePath : String ) -> TableData:
+    # Check if the filePath provided is different from the cached file
+    if ( filePath != cached_filepath ):
+        # Then we have a changed filepath that we are trying to load.
+        # If the cached table is empty, this is no problem, but if
+        # there is data in it, we should probably prompt the user about this
+        if ( !cached_table.is_empty() ):
+            # TODO(klek): Prompt user about saving old table
+            request_save_file.emit()
+            print( "Warning: Old table is not empty, data is lost..." )
     # Open the file
-    var file : FileAccess = FileAccess.open( filename, FileAccess.READ )
+    var file : FileAccess = FileAccess.open( filePath, FileAccess.READ )
     var table_data : TableData = TableData.new()
     if ( file ):
+        filepath_used.emit( cached_filepath, FILE_PATH_ACTION.OPENED )
+        # Discard the old table data by setting cached_table to null
+        cached_table = null
         # NOTE(klek): Do we need to check if the file is empty
         if ( file.get_length() == 0 ):
             # Then we just created this file, and we will just
             # return an empty table for now
-            return table_data
+            cached_table = table_data
+            return cached_table
         # Read data as text and parse this data directly with JSON
         var content = JSON.parse_string( file.get_as_text() )
         # Check that the content is a dictionary
         if ( content && ( content is Dictionary ) ):
             table_data = table_data.convert_from_dict( content )
+        # Now we should have a valid table in table data
+        if ( table_data is TableData ):
+            cached_table = table_data
+    else:
+        print( "Could not open filepath: %s" % filePath )
     # Finally return table_data
-    return table_data
+    return cached_table
 
-#func load_file( directory_path : String, filename : String ) -> void:
-    #if ( _valid_filename_regex.search( filename ) ):
-        #push_error("%s is not a valid file" % filename )
-        #return
-    ## Set a full-path
-    #var full_path : String = directory_path.path_join( filename )
-    ## Try to open the file
-    #var file : = FileAccess.open( full_path, FileAccess.READ )
-    #if ( file ):
-        ## If the file is empty we ignore it for now
-        #if ( file.get_length() == 0 ):
-            #return
-        #JSON.new()
+# Function to simply update the cached table
+func update_cached_table( table_data : TableData ) -> void:
+    cached_table = table_data
+
+# Function to simply clear the cached table
+func clear_cached_table( ) -> void:
+    cached_table = null

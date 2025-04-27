@@ -17,6 +17,11 @@ signal table_updated( table_data : TableData )
 ## The columns associated with this table
 @export var column_datas : Array[ ColumnData ]
 
+func is_empty() -> bool:
+    # If the title isn't set and column_datas is empty, the table
+    # is currently considered empty
+    return ( title.is_empty() && column_datas.is_empty() )
+
 
 func grab_column_data( index : int ) -> ColumnData:
     var column_data : ColumnData = column_datas[ index ]
