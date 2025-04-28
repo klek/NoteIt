@@ -1,11 +1,24 @@
 extends Node
 
+# Todos:
 # TODO(klek): Change project to Low-processor mode under Application/run
 # TODO(klek): Change renderer to mobile under Rendering/Renderer/Rendering Method
 # TODO(klek): Set the get_window().min_size
 # TODO(klek): Use _get_drag_data(), _can_drop_data() and _drop_data()?
 # TODO(klek): Clean input data in columns by removing empty slots
 # TODO(klek): Add a welcome screen
+# TODO(klek): Add check for if the cache has changed since last load
+#             such that a change is known, see issue 1
+
+# Issues:
+# ISSUE(1): Currently on file open, when opening the same path again, and
+#           the table have changed, the changes in the cached table are
+#           overwritten...
+# ISSUE(2): When opening a new file and having a changed table, the user
+#           is prompted to save the current table. However, unless the
+#           user cancels, this starts a loop where you cannot open the
+#           new file unless you press cancel...
+
 
 # References
 @onready var table: Table = %Table
@@ -45,10 +58,10 @@ func _connect_signals( ) -> void:
     save_button.pressed.connect( _on_save_button_pressed )
     load_button.pressed.connect( _on_load_button_pressed )
     # Setup the file_open
-    file_open.confirmed.connect( _on_file_open_confirmed )
     file_open.file_selected.connect( _on_file_open_selected )
     # Setup the file_save
     file_save.canceled.connect( _on_file_save_cancelled )
+    file_save.file_selected.connect( _on_file_save_selected )
 
 # Callback-function to update the local table_data based on the cache
 func _update_table_data_from_cache( table_data : TableData, cleared : bool = false ) -> void:
@@ -90,26 +103,18 @@ func _on_load_button_pressed( ) -> void:
     file_open.show()
     #table_data = cache.load_file( "res://save_data.json" )
 
-# Callback for the confirmed-signal from FileOpen file-dialog
-# NOTE(klek): Consider removing this and instead only use the file_selected
-func _on_file_open_confirmed( ) -> void:
-    # Get the selected file
-    cache.load_from_file( file_open.current_path )
-
 # Callback for the file_selected signal from FileOpen file-dialog
 func _on_file_open_selected( path : String ) -> void:
-    cache.cached_filepath = path
+    #cache.cached_filepath = path
+    # Get the selected file
+    cache.load_from_file( path )
 
 # Callback for the cancelled signal from the FileSave file-dialog
 func _on_file_save_cancelled( ) -> void:
     cache.clear_cached_table( )
 
-# Callback for the confirmed-signal from FileSave file-dialog
-# NOTE(klek): Consider removing this and instead only use the file_selected
-func _on_file_save_confirmed( ) -> void:
-    # Get the selected file
-    cache.save_to_file( file_open.current_path )
-
 # Callback for the file_selected signal from FileSave file-dialog
 func _on_file_save_selected( path : String ) -> void:
-    cache.cached_filepath = path
+    #cache.cached_filepath = path
+    # Get the selected file
+    cache.save_to_file( path )

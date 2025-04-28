@@ -83,16 +83,23 @@ func save_to_file( filePath : String = "" ) -> void:
     # Otherwise we use the cache filepath
     elif ( cached_filepath.is_empty() ):
         # If this is empty, well we are in a pickle...
-        # TODO(klek): Prompt user about a save location / filepath
+        # Prompt user about a save location / filepath
         request_save_file.emit()
         print( "Need a path to save to!" )
-        # and then we return her
+        # And then we return here
         return
     # Otherwise, lets continue to open the provide path
     var file : = FileAccess.open( cached_filepath, FileAccess.WRITE )
     if ( file ):
-        # NOTE(klek): Do we need to check if the file is empty?
-        var data_to_save : Dictionary = cached_table.convert_to_dict()
+        # NOTE(klek): Do we need to check if the file is empty? Or do we just
+        # overwrite it?
+        var data_to_save : Dictionary
+        # Check that the cached_table is valid and not empty
+        if ( cached_table != null && !cached_table.is_empty() ):
+            # The write data to the dictionary
+            data_to_save = cached_table.convert_to_dict()
+        # Otherwise we just write an empty dictionary
+        # Write the dictionary to file
         file.store_string( JSON.stringify( data_to_save, "\t" ) )
         file.close()
         # TODO(klek): We should show a small popup here of successfull save
@@ -114,22 +121,26 @@ func load_from_file( filePath : String ) -> TableData:
         # Then we have a changed filepath that we are trying to load.
         # If the cached table is empty, this is no problem, but if
         # there is data in it, we should probably prompt the user about this
-        if ( !cached_table.is_empty() ):
-            # TODO(klek): Prompt user about saving old table
+        if ( cached_table != null && !cached_table.is_empty() ):
+            # Prompt user about saving old table
             request_save_file.emit()
             print( "Warning: Old table is not empty, data is lost..." )
+            # And then we return here
+            return
+        # Otherwise the cached filepath should be updated
+        cached_filepath = filePath
     # Open the file
     var file : FileAccess = FileAccess.open( filePath, FileAccess.READ )
     var table_data : TableData = TableData.new()
     if ( file ):
         filepath_used.emit( cached_filepath, FILE_PATH_ACTION.OPENED )
         # Discard the old table data by setting cached_table to null
-        cached_table = null
+        clear_cached_table( )
         # NOTE(klek): Do we need to check if the file is empty
         if ( file.get_length() == 0 ):
             # Then we just created this file, and we will just
             # return an empty table for now
-            cached_table = table_data
+            update_cached_table( table_data )
             return cached_table
         # Read data as text and parse this data directly with JSON
         var content = JSON.parse_string( file.get_as_text() )
@@ -137,11 +148,13 @@ func load_from_file( filePath : String ) -> TableData:
         if ( content && ( content is Dictionary ) ):
             table_data = table_data.convert_from_dict( content )
         # Now we should have a valid table in table data
-        if ( table_data is TableData ):
-            cached_table = table_data
+        if ( table_data != null && !table_data.is_empty() ):
+            update_cached_table( table_data )
+        else:
+            print( "No data of expected format in file" )
     else:
         print( "Could not open filepath: %s" % filePath )
-    # Finally return table_data
+    # Finally return cached table
     return cached_table
 
 # Function to simply update the cached table
