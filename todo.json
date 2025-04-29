@@ -1,0 +1,99 @@
+{
+	"bg_color": [
+		0.0,
+		0.0,
+		0.0,
+		1.0
+	],
+	"column_datas": [
+		{
+			"card_datas": [
+				{
+					"description": "Set the get_window().min_size",
+					"title": "Set window min-size",
+					"wrap_text": true
+				},
+				{
+					"description": "Consider using the _get_drag_data(), _can_drop_data() and _drop_data() functions that are available for control nodes",
+					"title": "Use built-in drag-and-drop",
+					"wrap_text": true
+				},
+				{
+					"description": "Add a parser that searches a directory and sub-directories, looking for \"TODO($user): Text\" in code.",
+					"title": "Add parsing functionality",
+					"wrap_text": true
+				},
+				{
+					"description": "Use the parsed info to generate cards that can just be adjusted in the GUI",
+					"title": "Generate cards from parsed info",
+					"wrap_text": true
+				}
+			],
+			"column_index": 0,
+			"column_title": "Backlog",
+			"column_width": 70
+		},
+		{
+			"card_datas": [
+				{
+					"description": "Change project to low processor mode under Application/Run",
+					"title": "Low processor mode",
+					"wrap_text": true
+				},
+				{
+					"description": "Change renderer to the mobile under Rendering/Renderer/Rendering",
+					"title": "Mobile renderer",
+					"wrap_text": true
+				},
+				{
+					"description": "Add a welcome screen",
+					"title": "Welcome screen",
+					"wrap_text": true
+				},
+				{
+					"description": "Allow the change of table name",
+					"title": "Change table name",
+					"wrap_text": true
+				},
+				{
+					"description": "Add the option to edit already existing cards.",
+					"title": "Edit cards",
+					"wrap_text": true
+				}
+			],
+			"column_index": 0,
+			"column_title": "Todo",
+			"column_width": 70
+		},
+		{
+			"card_datas": [
+				{
+					"description": "Add the functionality to add or remove a column in a table",
+					"title": "Add/remove column",
+					"wrap_text": true
+				},
+				{
+					"description": "Add the functionality to add or remove cards in a column",
+					"title": "Add/remove cards",
+					"wrap_text": true
+				}
+			],
+			"column_index": 0,
+			"column_title": "In progress",
+			"column_width": 70
+		},
+		{
+			"card_datas": [
+				{
+					"description": "Remove empty slots in card_datas-array for each column",
+					"title": "Clean card_datas",
+					"wrap_text": true
+				}
+			],
+			"column_index": 0,
+			"column_title": "Finished",
+			"column_width": 70
+		}
+	],
+	"title": ""
+}

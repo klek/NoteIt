@@ -21,7 +21,19 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 theme_override_constants/separation = 4
 
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SpacerCardHeader" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RemoveCardButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "X"
+
 [node name="Title" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_qnn7r")]
+unique_name_in_owner = true
 layout_mode = 2
 text = "This is Title"
 
@@ -29,10 +41,13 @@ text = "This is Title"
 layout_mode = 2
 
 [node name="Description" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_qnn7r")]
+unique_name_in_owner = true
 layout_mode = 2
 text = "This is description"
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="gui_input" from="MarginContainer/VBoxContainer/HBoxContainer/SpacerCardHeader" to="." method="_on_gui_input"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/RemoveCardButton" to="." method="_on_remove_card_button_pressed"]
 [connection signal="gui_input" from="MarginContainer/VBoxContainer/Title" to="." method="_on_gui_input"]
 [connection signal="gui_input" from="MarginContainer/VBoxContainer/HSeparator" to="." method="_on_gui_input"]
 [connection signal="gui_input" from="MarginContainer/VBoxContainer/Description" to="." method="_on_gui_input"]

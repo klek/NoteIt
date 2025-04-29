@@ -48,7 +48,7 @@ func _set_table( value : TableData ) -> void:
         cached_table_updated.emit( cached_table, true )
     else:
         # Add the newest table to the array
-        _cached_tables.push_back( value )
+        _cached_tables.push_back( value.duplicate() )
         cached_table = value
         # Emit the update
         cached_table_updated.emit( cached_table, false )

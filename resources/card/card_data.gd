@@ -1,11 +1,19 @@
 class_name CardData
 extends Resource
 
+enum CARD_ACTIONS {
+    CARD_CLICKED,
+    CARD_EDIT_CLICKED,
+    CARD_REMOVE_CLICKED,
+
+    CARD_ACTION_UNDEF
+}
+
 @export var title : String = "" : set = _set_title_text
 
 @export_multiline var description : String = "" : set = _set_description_text
 
-@export var wrap_text : bool = false
+@export var wrap_text : bool = true
 
 # TODO(klek): Consider enforcing a maximum number of characters for title and
 # description. For example 70 character limit on title and 3 times that for

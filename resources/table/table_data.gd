@@ -1,12 +1,25 @@
 class_name TableData
 extends Resource
 
+const c_max_int = ( pow(2, 62) )
+
+enum TABLE_ACTIONS {
+    COLUMN_CLICKED,
+    COLUMN_GRAB_CLICKED,
+    COLUMN_ADD_CLICKED,
+    CARD_ADD_CLICKED,
+    TABLE_CLICKED,
+
+    TABLE_ACTION_UNDEF
+}
+
+
 ## Signal generated when there is an interaction with this table_data
 ## This signal is primarily used for GUI interactions
-signal table_interact( table_data : TableData, index : int, button : int )
+signal table_data_interact( table_data : TableData, column_index : int, button : int, action : TABLE_ACTIONS )
 
 ## Signal generated when this table has been updated/changed in anyway
-signal table_updated( table_data : TableData )
+signal table_data_updated( table_data : TableData )
 
 ## The name of this table
 @export var title : String = ""
@@ -17,24 +30,7 @@ signal table_updated( table_data : TableData )
 ## The columns associated with this table
 @export var column_datas : Array[ ColumnData ]
 
-func is_empty() -> bool:
-    # If the title isn't set and column_datas is empty, the table
-    # is currently considered empty
-    return ( title.is_empty() && column_datas.is_empty() )
-
-
-func grab_column_data( index : int ) -> ColumnData:
-    var column_data : ColumnData = column_datas[ index ]
-    # Is there something there?
-    if ( column_data ):
-        # Set the current index to null
-        column_datas[ index ] = null
-        table_updated.emit( self )
-        return column_data
-    else:
-        return null
-
-
+#
 func convert_to_dict( ) -> Dictionary:
     var dict : Dictionary
     # Store the title of the table
@@ -52,7 +48,7 @@ func convert_to_dict( ) -> Dictionary:
 
     return dict
 
-
+#
 func convert_from_dict( table_dict : Dictionary ) -> TableData:
     # TODO(klek): Might need to do sanity-checking here?
     var table_data : TableData = TableData.new()
@@ -79,10 +75,63 @@ func convert_from_dict( table_dict : Dictionary ) -> TableData:
                 table_data.column_datas.push_back( column_data.convert_from_dict( column ) )
     return table_data
 
+#
+func is_empty() -> bool:
+    # If the title isn't set and column_datas is empty, the table
+    # is currently considered empty
+    return ( title.is_empty() && column_datas.is_empty() )
+
+#
+func grab_column_data( index : int ) -> ColumnData:
+    return remove_column_data( index )
+
+#
+func add_column_data( column_data : ColumnData ) -> void:
+    if ( column_datas.size() < 1 ):
+        print( "Empty array" )
+    else:
+        print( "%d elements in array" % column_datas.size() )
+    # Adding a column_data is easy
+    if ( column_data.column_index >= column_datas.size() ):
+        column_datas.push_back( column_data )
+    elif ( column_data.column_index < 0 ):
+        column_datas.push_front( column_data )
+    else:
+        column_datas.insert( column_data.column_index, column_data )
+    table_data_updated.emit( self )
+
+
+#
+func remove_column_data( index : int ) -> ColumnData:
+    # Get the current size of the array
+    var size : int = column_datas.size()
+    var column_data : ColumnData
+    if ( size < index ):
+        # We do nothing, trying to remove a index outside of the array
+        push_error( "Array-size is %d but index is %d" % [ size, index ] )
+        return null
+    # NOTE(klek): We could always pop_at here right?
+    column_data = column_datas.pop_at( index )
+    table_data_updated.emit( self )
+    return column_data
+
 
 ## This callback needs to be connected from the GUI side, when this column
 ## is clicked
-func _on_column_clicked( index : int, button : int ) -> void:
-    # Do we need to add a new dataslot to this column?
-    table_interact.emit( self, index, button )
-    print( "Column clicked again" )
+func _on_column_clicked( column_index : int, button : int, action : ColumnData.COLUMN_ACTIONS ) -> void:
+    match ( action ):
+        ColumnData.COLUMN_ACTIONS.COLUMN_CLICKED:
+            # Do we need to add a new dataslot to this column?
+            table_data_interact.emit( self, column_index, button, TABLE_ACTIONS.COLUMN_CLICKED )
+        ColumnData.COLUMN_ACTIONS.COLUMN_GRAB_CLICKED:
+            table_data_interact.emit( self, column_index, button, TABLE_ACTIONS.COLUMN_GRAB_CLICKED )
+        ColumnData.COLUMN_ACTIONS.CARD_ADD_CLICKED:
+            table_data_interact.emit( self, column_index, button, TABLE_ACTIONS.CARD_ADD_CLICKED )
+        ColumnData.COLUMN_ACTIONS.COLUMN_REMOVE_CLICKED:
+            remove_column_data( column_index )
+            # Call local remove column function and the emit table update
+            table_data_updated.emit( self )
+
+func _on_column_add_clicked(  ) -> void:
+    # We emit
+    table_data_interact.emit( self, 0, 0, TABLE_ACTIONS.COLUMN_ADD_CLICKED )

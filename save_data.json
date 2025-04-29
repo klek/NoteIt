@@ -9,11 +9,6 @@
 		{
 			"card_datas": [
 				{
-					"description": "Define and setup cards for the database",
-					"title": "Setup Cards",
-					"wrap_text": true
-				},
-				{
 					"description": "This is the top-level data-structure. The table contains columns, which in turn contain the cards.",
 					"title": "Define a table",
 					"wrap_text": true
@@ -24,7 +19,23 @@
 			"column_width": 70
 		},
 		{
-			"card_datas": [],
+			"card_datas": [
+				{
+					"description": "Currently the text I write is persisting after card_input is hidden",
+					"title": "Remove text between edits",
+					"wrap_text": true
+				},
+				{
+					"description": "This is the top-level data-structure. The table contains columns, which in turn contain the cards.",
+					"title": "Define a table",
+					"wrap_text": true
+				},
+				{
+					"description": "Define and setup cards for the database",
+					"title": "Setup Cards",
+					"wrap_text": true
+				}
+			],
 			"column_index": 0,
 			"column_title": "Finished",
 			"column_width": 70
@@ -39,11 +50,6 @@
 				{
 					"description": "Define columns as an array of cards. A column also has a title etc",
 					"title": "Setup columns",
-					"wrap_text": true
-				},
-				{
-					"description": "This is the top-level data-structure. The table contains columns, which in turn contain the cards.",
-					"title": "Define a table",
 					"wrap_text": true
 				}
 			],

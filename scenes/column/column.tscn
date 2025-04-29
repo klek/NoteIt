@@ -24,24 +24,40 @@ theme_override_constants/margin_bottom = 12
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Title" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_iq7rl")]
-layout_mode = 2
-text = "Column title"
-
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="AddCard" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="AddCardButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Add a card"
 
+[node name="ColumnGrabArea" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RemoveColumnButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "X"
+
+[node name="Title" parent="MarginContainer/VBoxContainer" instance=ExtResource("1_iq7rl")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Column title"
+
 [node name="CardTree" type="VBoxContainer" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer"]
+[node name="SpacerColumnBottom" type="Control" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/AddCardButton" to="." method="_on_add_card_button_pressed"]
+[connection signal="gui_input" from="MarginContainer/VBoxContainer/HBoxContainer/ColumnGrabArea" to="." method="_on_column_grab_area"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/RemoveColumnButton" to="." method="_on_remove_column_button_pressed"]
 [connection signal="gui_input" from="MarginContainer/VBoxContainer/Title" to="." method="_on_gui_input"]
-[connection signal="gui_input" from="MarginContainer/VBoxContainer/Spacer" to="." method="_on_gui_input"]
+[connection signal="gui_input" from="MarginContainer/VBoxContainer/SpacerColumnBottom" to="." method="_on_gui_input"]

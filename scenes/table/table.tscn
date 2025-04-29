@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://bjpm6kucf6e5g"]
+[gd_scene load_steps=7 format=3 uid="uid://bjpm6kucf6e5g"]
 
 [ext_resource type="Script" uid="uid://dmw6dwh0ptnek" path="res://scenes/table/table.gd" id="1_ov72x"]
 [ext_resource type="PackedScene" uid="uid://vrev0us2o6b0" path="res://scenes/column/column.tscn" id="1_qavd0"]
 [ext_resource type="PackedScene" uid="uid://c32hcn5geskv3" path="res://scenes/textbox/text_box.tscn" id="2_wpgb8"]
 [ext_resource type="PackedScene" uid="uid://bvhi5g7elwyoq" path="res://scenes/card/card.tscn" id="4_wpgb8"]
+[ext_resource type="PackedScene" uid="uid://8nmfjijbdbyq" path="res://scenes/card/card_input.tscn" id="5_0y6hh"]
+[ext_resource type="PackedScene" uid="uid://dv1puytstger8" path="res://scenes/column/column_input.tscn" id="6_vd5qv"]
 
 [node name="Table" type="PanelContainer"]
 anchors_preset = 15
@@ -24,25 +26,44 @@ theme_override_constants/margin_bottom = 8
 layout_mode = 2
 
 [node name="Title" parent="MarginContainer/VBoxContainer" instance=ExtResource("2_wpgb8")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="AddColumn" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Add a column"
 
 [node name="ColumnTree" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="GrabbedColumn" parent="." instance=ExtResource("1_qavd0")]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
 [node name="GrabbedCard" parent="." instance=ExtResource("4_wpgb8")]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/AddColumn" to="." method="_on_add_column_pressed"]
+[node name="CardInput" parent="." instance=ExtResource("5_0y6hh")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColumnInput" parent="." instance=ExtResource("6_vd5qv")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

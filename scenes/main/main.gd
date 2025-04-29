@@ -53,7 +53,7 @@ func _connect_signals( ) -> void:
     cache.filepath_used.connect( _on_file_path_used )
     cache.request_save_file.connect( _on_request_save_file )
     # Setup table and its signals
-    _table_data.table_updated.connect( cache.update_cached_table )
+    _table_data.table_data_updated.connect( cache.update_cached_table )
     # Setup buttons
     save_button.pressed.connect( _on_save_button_pressed )
     load_button.pressed.connect( _on_load_button_pressed )
@@ -71,7 +71,7 @@ func _update_table_data_from_cache( table_data : TableData, cleared : bool = fal
             print("Cleared was announced but table is not null?")
         _table_data = null
     if ( table_data != null ):
-        _table_data = table_data.duplicate()
+        _table_data = table_data#.duplicate()
     # Call set table
     if ( table && _table_data ):
         table.set_table_data( _table_data )
